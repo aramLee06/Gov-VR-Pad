@@ -21,9 +21,11 @@ namespace VR.Connect
 			}
 		}
 
-		private int _uid;
+		private int _uid = -1;
 		public int uid {
 			get {
+				if (_uid == -1)
+					_uid = int.Parse (VRRest.Request("/uid"));
 				return _uid;
 			}
 		}
@@ -34,11 +36,20 @@ namespace VR.Connect
 
 		#region Delegate & Event
 		public delegate void BaseEventHandler ();
-		public delegate void GetUidHandler (int uid);
+		public delegate void BindFailedHandler (int code);
+		public delegate void ReceiveUidEventHandler (int uid);
+		public delegate void GameCountHandler (int value);
 
 
 		public event BaseEventHandler OnBindSuccess;
-		public event GetUidHandler OnGetUid;
+		public event BindFailedHandler OnBindFailed;
+		public event BaseEventHandler OnFire;
+		public event GameCountHandler OnGameCount;
+		public event BaseEventHandler OnGameStart;
+		public event BaseEventHandler OnGameEnd;
+		public event ReceiveUidEventHandler OnHit;
+		public event BaseEventHandler OnMap;
+
 		#endregion
 
 		public ConnectController() {
@@ -65,8 +76,31 @@ namespace VR.Connect
 		protected void ProcessMessage(Receive.ReceiveMessage msg)
 		{
 			if (msg is Receive.BindSuccessMessage) {
-				if(OnBindSuccess != null)
+				if (OnBindSuccess != null)
 					OnBindSuccess ();
+			} else if (msg is Receive.BindFailedMessage) {
+				if (OnBindFailed != null)
+					OnBindFailed (((Receive.BindFailedMessage)msg).Code);
+			} else if (msg is Receive.MoveAndRotateMessage) {
+				//
+			} else if (msg is Receive.FireMessage) {
+				if (OnFire != null)
+					OnFire ();
+			} else if (msg is Receive.GameStartMessage) {
+				if (OnGameStart != null)
+					OnGameStart ();
+			} else if (msg is Receive.GameCountMessage) {
+				if (OnGameCount != null)
+					OnGameCount (((Receive.GameCountMessage)msg).value);
+			} else if (msg is Receive.GameEndMessage) {
+				if (OnGameEnd != null)
+					OnGameEnd ();
+			} else if (msg is Receive.HitMessage) {
+				if (OnHit != null)
+					OnHit (((Receive.HitMessage)msg).uid);
+			} else if (msg is Receive.MapMessage) {
+				if (OnMap != null)
+					OnMap ();
 			}
 		}
 
@@ -74,9 +108,7 @@ namespace VR.Connect
 
 		void OnConnect()
 		{
-			_uid = int.Parse (VRRest.Request("/uid"));
-			if (OnGetUid != null)
-				OnGetUid (uid);
+			
 		}
 
 		void OnConnectFailed()

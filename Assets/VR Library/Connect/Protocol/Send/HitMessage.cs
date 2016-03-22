@@ -2,16 +2,16 @@
 
 namespace VR.Connect.Protocol.Send
 {
-	class FireMessage : SendMessage
+	class HitMessage : SendMessage
 	{
-		public FireMessage ()
+		public HitMessage ()
 		{
 		}
 
 		public override byte[] Generate()
 		{ //cmd
 			byteList.Clear ();
-			AddByte8 (3); //cmd
+			AddByte8 (4); //cmd
 			return byteList.ToArray ();
 		}
 	}

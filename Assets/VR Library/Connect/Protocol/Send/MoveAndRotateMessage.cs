@@ -2,37 +2,58 @@
 
 namespace VR.Connect.Protocol.Send
 {
-	class MoveMessage : SendMessage
+	class MoveAndRotateMessage : SendMessage
 	{
-		private int _axisX;
-		public int axisX {
+		private int _moveX;
+		public int moveX {
 			get{
-				return axisX;
+				return moveX;
 			}
 			set{
-				axisX = value;
+				moveX = value;
 			}
 		}
-		private int _axisY;
-		public int axisY {
+		private int _moveY;
+		public int moveY {
 			get{
-				return axisY;
+				return moveY;
 			}
 			set{
-				axisY = value;
+				moveY = value;
+			}
+		}
+		private int _rotateX;
+		public int rotateX {
+			get{
+				return rotateX;
+			}
+			set{
+				rotateX = value;
+			}
+		}
+		private int _rotateY;
+		public int rotateY {
+			get{
+				return rotateY;
+			}
+			set{
+				rotateY = value;
 			}
 		}
 
-		public MoveMessage ()
+
+		public MoveAndRotateMessage ()
 		{
 		}
 
 		public override byte[] Generate()
 		{ //cmd, x, y
 			byteList.Clear ();
-			AddByte8 (3); //cmd
-			AddByteFloat(axisX);
-			AddByteFloat (axisY);
+			AddByte8 (2); //cmd
+			AddByteFloat(moveX);
+			AddByteFloat (moveY);
+			AddByteFloat(rotateX);
+			AddByteFloat (rotateY);
 			return byteList.ToArray ();
 		}
 	}
