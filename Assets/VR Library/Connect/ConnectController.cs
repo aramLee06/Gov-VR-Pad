@@ -39,17 +39,24 @@ namespace VR.Connect
 		public delegate void BindFailedHandler (int code);
 		public delegate void ReceiveUidEventHandler (int uid);
 		public delegate void GameCountHandler (int value);
+		public delegate void MoveAndRotateHandler (Vector2 move, Vector2 rotate);
 
 
+		public event BaseEventHandler OnConnectSucceed;
+		public event BaseEventHandler OnConnectFailed;
 		public event BaseEventHandler OnBindSuccess;
-		public event BindFailedHandler OnBindFailed;
 		public event BaseEventHandler OnFire;
-		public event GameCountHandler OnGameCount;
 		public event BaseEventHandler OnGameStart;
 		public event BaseEventHandler OnGameEnd;
-		public event ReceiveUidEventHandler OnHit;
 		public event BaseEventHandler OnMap;
 
+		public event GameCountHandler OnGameCount;
+
+		public event ReceiveUidEventHandler OnHit;
+
+		public event BindFailedHandler OnBindFailed;
+
+		public event MoveAndRotateHandler OnControl;
 		#endregion
 
 		public ConnectController() {
@@ -57,7 +64,7 @@ namespace VR.Connect
 
 			m_VRSocket = new VRSocket ();
 			m_VRSocket.OnConnect += OnConnect;
-			m_VRSocket.OnConnectFailed += OnConnectFailed;
+			m_VRSocket.OnConnectFailed += OnConnectFailed_Socket;
 			m_VRSocket.OnDataReceived += OnDataReceived;
 		}
 
@@ -82,7 +89,13 @@ namespace VR.Connect
 				if (OnBindFailed != null)
 					OnBindFailed (((Receive.BindFailedMessage)msg).Code);
 			} else if (msg is Receive.MoveAndRotateMessage) {
-				//
+				Receive.MoveAndRotateMessage m = (Receive.MoveAndRotateMessage)msg;
+
+				Vector2 move = new Vector2 (m.moveX, m.moveY);
+				Vector2 rotate = new Vector2 (m.rotateX, m.rotateY);
+
+				if (OnControl != null)
+					OnControl (move, rotate);
 			} else if (msg is Receive.FireMessage) {
 				if (OnFire != null)
 					OnFire ();
@@ -108,12 +121,14 @@ namespace VR.Connect
 
 		void OnConnect()
 		{
-			
+			if (OnConnectSucceed != null)
+				OnConnectSucceed ();
 		}
 
-		void OnConnectFailed()
+		void OnConnectFailed_Socket()
 		{
-			Debug.Log ("OnConnectFailed ");
+			if (OnConnectFailed != null)
+				OnConnectFailed ();
 		}
 
 		void OnDataReceived (byte[] arr)

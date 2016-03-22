@@ -4,46 +4,53 @@ namespace VR.Connect.Protocol.Send
 {
 	class MoveAndRotateMessage : SendMessage
 	{
-		private int _moveX;
-		public int moveX {
+		private float _moveX;
+		public float moveX {
 			get{
-				return moveX;
+				return _moveX;
 			}
 			set{
-				moveX = value;
+				_moveX = value;
 			}
 		}
-		private int _moveY;
-		public int moveY {
+		private float _moveY;
+		public float moveY {
 			get{
-				return moveY;
+				return _moveY;
 			}
 			set{
-				moveY = value;
+				_moveY = value;
 			}
 		}
-		private int _rotateX;
-		public int rotateX {
+		private float _rotateX;
+		public float rotateX {
 			get{
-				return rotateX;
+				return _rotateX;
 			}
 			set{
-				rotateX = value;
+				_rotateX = value;
 			}
 		}
-		private int _rotateY;
-		public int rotateY {
+		private float _rotateY;
+		public float rotateY {
 			get{
-				return rotateY;
+				return _rotateY;
 			}
 			set{
-				rotateY = value;
+				_rotateY = value;
 			}
 		}
 
 
 		public MoveAndRotateMessage ()
 		{
+		}
+
+		public MoveAndRotateMessage(float move_x, float move_y, float rotate_x, float roate_y){
+			this._moveX = move_x;
+			this._moveY = move_y;
+			this._rotateX = rotate_x;
+			this._rotateY = roate_y;
 		}
 
 		public override byte[] Generate()

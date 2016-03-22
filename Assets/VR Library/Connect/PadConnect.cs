@@ -29,6 +29,16 @@ namespace VR.Connect
 			this.Send (msg);
 		}
 
+		public void SendControlData(float move_x, float move_y, float rotate_x, float rotate_y) {
+			Send.MoveAndRotateMessage msg = new Send.MoveAndRotateMessage (move_x, move_y, rotate_x, rotate_y);
+			this.Send (msg);
+		}
+
+		public void SendFire(){
+			Send.FireMessage msg = new Send.FireMessage ();
+			this.Send (msg);
+		}
+
 		public void Run()
 		{
 			lock (MessageQueue) 
