@@ -56,9 +56,9 @@ public class RoomNumberWindow : MonoBehaviour {
 		if (CommandQueue.Count > 0) {
 			int cmd = CommandQueue.Dequeue ();
 
-			if (cmd == 0) {
+			if (cmd == 0) { 		//Connect Succeed
 				serverConnect.SetActive (false);
-			} else if (cmd == 1) {
+			} else if (cmd == 1) { 	//Connect Failed
 				OKPopUp.popUpType = OKPopUp.APPLICATION_QUIT;
 				CommonUtil.InstantiateOKPopUp("Failed connect to Server");	
 			}
@@ -85,16 +85,24 @@ public class RoomNumberWindow : MonoBehaviour {
 		}
 	}
 
-
+	/// <summary>
+	/// Number pad 화면 띄운다.
+	/// </summary>
 	public void OnConnectButtonUp(){
 		eventSystem.SetActive(false);
 		numberPad.SetActive(true);
 	}
 
+	/// <summary>
+	/// Connect Success. Between Server to pad (Socket open)
+	/// </summary>
 	void OnConnected(){
 		CommandQueue.Enqueue (0);
 	}
-	
+
+	/// <summary>
+	/// Connect Failed. Between Server to pad (Socket open failed)
+	/// </summary>
 	void OnConnectFailed(){
 		CommandQueue.Enqueue(1);
 	}
@@ -103,19 +111,31 @@ public class RoomNumberWindow : MonoBehaviour {
 		OKPopUp.popUpType = OKPopUp.APPLICATION_QUIT;
 		//CommonUtil.InstantiateOKPopUp(commonLang.langList[5]);
 	}
-
-
+	/// <summary>
+	/// Raises the bind success event. (between VR to Pad)
+	/// Load Next Scene. (pad controller)
+	/// </summary>
 	void OnBindSuccess(){
 		SceneManager.LoadScene ("Pad_Control");
 	}
 
+	/// <summary>
+	/// Raises the bind failed event. (between VR to Pad)
+	/// code = cause of failure
+	/// </summary>
+	/// <param name="code">Code.</param>
 	void OnBindFailed(int code){
 		if (code == 0) {
 			CommonUtil.InstantiateOKPopUp("Wrong VR Uid");	
 		}
 	}
 
-	
+	/// <summary>
+	/// Raises the join failed event.
+	/// (( connect -> JOIN (failed) -> bind ))
+	/// 게임에 참여..를 실패
+	/// </summary>
+	/// <param name="err">Error.</param>
 	void OnJoinFailed(int err){
 		Debug.Log ("JOIN ERROR : " + err);
 		if(err == 10001 || err == 20003){

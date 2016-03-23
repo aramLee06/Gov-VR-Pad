@@ -6,6 +6,11 @@ namespace VR.Connect.Protocol.Receive
 {
 	abstract class ReceiveMessage 
 	{
+		/// <summary>
+		/// Parse the specified data.
+		/// command부분을 읽어서 해당 객체를 생성
+		/// </summary>
+		/// <param name="data">Data.</param>
 		public static ReceiveMessage Parse(List<byte> data){
 			ReceiveMessage msg = null;
 

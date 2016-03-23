@@ -19,7 +19,9 @@ namespace VR.Connect
 				return instance;		
 			}
 		}
-
+		/// <summary>
+		/// VR_Join_Message Send to Server
+		/// </summary>
 		public void Join()
 		{
 			VRJoinMessage msg = new VRJoinMessage (this.uid);

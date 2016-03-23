@@ -13,7 +13,7 @@ namespace VR.Connect
 {
 	abstract class ConnectController
 	{
-		public static string SERVER_IP = "192.168.5.100";
+		public static string SERVER_IP = "192.168.5.104";
 		public const int SERVER_PORT = 3500; 
 		public static string REST_URL {
 			get {
@@ -25,7 +25,7 @@ namespace VR.Connect
 		public int uid {
 			get {
 				if (_uid == -1)
-					_uid = int.Parse (VRRest.Request("/uid"));
+					_uid = int.Parse (VRRest.Request("/uid")); //rest로 uid를 받아온다.
 				return _uid;
 			}
 		}
@@ -41,21 +41,58 @@ namespace VR.Connect
 		public delegate void GameCountHandler (int value);
 		public delegate void MoveAndRotateHandler (Vector2 move, Vector2 rotate);
 
-
+		/// <summary>
+		/// Occurs when on connect succeed.
+		/// VR or Pad - Server (socket open) 
+		/// </summary>
 		public event BaseEventHandler OnConnectSucceed;
+
+		/// <summary>
+		/// Occurs when on connect failed.
+		/// PVR or PAd -/- Server (socket open) 
+		/// </summary>
 		public event BaseEventHandler OnConnectFailed;
+
+		/// <summary>
+		/// Occurs when on bind success. (Between VR to Pad)
+		/// </summary>
 		public event BaseEventHandler OnBindSuccess;
+
+		/// <summary>
+		/// Occurs when on fire. (Press fire btn on pad)
+		/// </summary>
 		public event BaseEventHandler OnFire;
+
+		/// <summary>
+		/// Occurs when on game start.
+		/// </summary>
 		public event BaseEventHandler OnGameStart;
+
+		/// <summary>
+		/// Occurs when on game end.
+		/// </summary>
 		public event BaseEventHandler OnGameEnd;
+
+		/// <summary>
+		/// 미정
+		/// </summary>
 		public event BaseEventHandler OnMap;
 
 		public event GameCountHandler OnGameCount;
 
+		/// <summary>
+		/// Occurs when on hit. (미사일 맞았을 때)
+		/// </summary>
 		public event ReceiveUidEventHandler OnHit;
 
+		/// <summary>
+		/// Occurs when on bind failed. (Between VR to Pad)
+		/// </summary>
 		public event BindFailedHandler OnBindFailed;
 
+		/// <summary>
+		/// 패드에서의 동작 :: move, rotate(aim움직임)
+ 		/// </summary>
 		public event MoveAndRotateHandler OnControl;
 		#endregion
 
@@ -68,6 +105,9 @@ namespace VR.Connect
 			m_VRSocket.OnDataReceived += OnDataReceived;
 		}
 
+		/// <summary>
+		/// Connect Server (Socket open)
+		/// </summary>
 		public void Connect()
 		{
 			if (!m_VRSocket.IsConnected()) {
@@ -76,10 +116,20 @@ namespace VR.Connect
 
 		}
 
+		/// <summary>
+		/// Send the specified msg to Server. (Socket Write)
+		/// </summary>
+		/// <param name="msg">Message.</param>
 		protected void Send (Send.SendMessage msg){
 			m_VRSocket.Write (msg.Generate ());
 		}
 
+		/// <summary>
+		/// Processes the message.
+		/// Server to Client Message.
+		/// 서버로부터 온 메세지를 큐에서 꺼내 읽고 해당 이벤트 발생.
+		/// </summary>
+		/// <param name="msg">Message.</param>
 		protected void ProcessMessage(Receive.ReceiveMessage msg)
 		{
 			if (msg is Receive.BindSuccessMessage) {
@@ -96,7 +146,7 @@ namespace VR.Connect
 
 				if (OnControl != null)
 					OnControl (move, rotate);
-			} else if (msg is Receive.FireMessage) {
+			} else if (msg is Receive.FireMessage) { 
 				if (OnFire != null)
 					OnFire ();
 			} else if (msg is Receive.GameStartMessage) {
@@ -119,26 +169,39 @@ namespace VR.Connect
 
 		#region EVENT
 
+		/// <summary>
+		/// Raises the connect event.
+		/// Connect Succeed (Socket Open)ß
+		/// </summary>
 		void OnConnect()
 		{
 			if (OnConnectSucceed != null)
 				OnConnectSucceed ();
 		}
 
+		/// <summary>
+		/// Raises the connect failed. (socket open failed)
+		/// </summary>
 		void OnConnectFailed_Socket()
 		{
 			if (OnConnectFailed != null)
 				OnConnectFailed ();
 		}
 
+		/// <summary>
+		/// Raises the data received event.
+		/// byte[] array --> List<byte>
+		/// 받은 data를 parse해서 List에 넣어준다.
+		/// </summary>
+		/// <param name="arr">Arr.</param>
 		void OnDataReceived (byte[] arr)
 		{
-			List<byte> data = new List<byte> ();
+			List<byte> data = new List<byte> (); 
 			data.AddRange (arr);
 			lock (MessageQueue) {
 				while (data.Count > 0) 
 				{
-					MessageQueue.Enqueue (Receive.ReceiveMessage.Parse(data));
+					MessageQueue.Enqueue (Receive.ReceiveMessage.Parse(data)); //Parse 하고 queue에 넣는다!
 				}
 			}
 		}

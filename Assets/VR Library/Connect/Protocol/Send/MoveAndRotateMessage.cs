@@ -41,11 +41,10 @@ namespace VR.Connect.Protocol.Send
 			}
 		}
 
-
+		//생성자
 		public MoveAndRotateMessage ()
 		{
 		}
-
 		public MoveAndRotateMessage(float move_x, float move_y, float rotate_x, float roate_y){
 			this._moveX = move_x;
 			this._moveY = move_y;

@@ -22,18 +22,35 @@ namespace VR.Connect
 		public PadConnect(){
 			
 		}
-
+		/// <summary>
+		/// Pad_Join_Message Send to Server
+		/// </summary>
+		/// <param name="vr_uid">Vr uid.</param>
 		public void Join(int vr_uid)
 		{
 			Send.PadJoinMessage msg = new Send.PadJoinMessage (this.uid, vr_uid);
 			this.Send (msg);
 		}
 
+		/// <summary>
+		/// Sends the control data.
+		/// control data is move and rotate. (float)
+		/// move :: unit (left)
+		/// rotate :: aim (right)
+		/// </summary>
+		/// <param name="move_x">Move x.</param>
+		/// <param name="move_y">Move y.</param>
+		/// <param name="rotate_x">Rotate x.</param>
+		/// <param name="rotate_y">Rotate y.</param>
 		public void SendControlData(float move_x, float move_y, float rotate_x, float rotate_y) {
 			Send.MoveAndRotateMessage msg = new Send.MoveAndRotateMessage (move_x, move_y, rotate_x, rotate_y);
 			this.Send (msg);
 		}
 
+		/// <summary>
+		/// Send Fire_Message. 
+		/// When press fire btn on pad
+		/// </summary>
 		public void SendFire(){
 			Send.FireMessage msg = new Send.FireMessage ();
 			this.Send (msg);
