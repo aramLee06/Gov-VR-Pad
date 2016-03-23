@@ -86,7 +86,7 @@ public class RoomNumberWindow : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Number pad 화면 띄운다.
+	/// Number pad 화면을 띄운다.
 	/// </summary>
 	public void OnConnectButtonUp(){
 		eventSystem.SetActive(false);

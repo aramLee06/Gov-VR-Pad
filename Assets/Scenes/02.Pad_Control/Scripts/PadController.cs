@@ -24,6 +24,11 @@ public class PadController : MonoBehaviour {
 		beforeAxis = RotateJoyStick.JoystickAxis;
 	}
 	//IEumerator : 제네릭이 아닌 컬렉션을 단순하게 반복할 수 있도록 지원합니다.
+	/// <summary>
+	/// Sends the move, rotate.
+	/// 0.4초 마다 move joy stick, rotate joy stick의 움직임을 읽고 서버로 보낸다. 
+	/// </summary>
+	/// <returns>The move rotate.</returns>
 	private IEnumerator SendMoveRotate()
 	{
 		while(true)
