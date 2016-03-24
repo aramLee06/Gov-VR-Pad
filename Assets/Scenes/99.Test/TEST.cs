@@ -41,6 +41,7 @@ public class TEST : MonoBehaviour {
 	public void OnControl(Vector2 move, Vector2 rotate){
 		moveText.text = "Move, x : " + move.x + ", y : " + move.y;
 		rotateText.text = "Rotate, x : " + rotate.x + ", y : " + rotate.y;
+
 	}
 
 	int fireCount = 0;

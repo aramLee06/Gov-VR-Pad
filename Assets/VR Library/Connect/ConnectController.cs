@@ -81,7 +81,7 @@ namespace VR.Connect
 		public event GameCountHandler OnGameCount;
 
 		/// <summary>
-		/// Occurs when on hit. (미사일 맞았을 때)
+		/// Occurs when on hit. (대포 맞았을 때)
 		/// </summary>
 		public event ReceiveUidEventHandler OnHit;
 

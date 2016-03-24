@@ -9,6 +9,8 @@ public class PadController : MonoBehaviour {
 	public EasyJoystick RotateJoyStick;
 
 	private Vector2 beforeAxis;
+	private Vector2 prevMove;
+	private Vector2 prevRotate;
 
 	private PadConnect m_PadConnect;
 
@@ -36,7 +38,13 @@ public class PadController : MonoBehaviour {
 			yield return new WaitForSeconds(0.4f); // wait half a second
 			Vector2 move = MoveJoyStick.JoystickAxis;
 			Vector2 rotate = RotateJoyStick.JoystickAxis;
-			m_PadConnect.SendControlData (move.x, move.y, rotate.x, rotate.y); //얘를 계속 보내준다.
+
+			if(prevMove!=move || prevRotate!=rotate){
+				m_PadConnect.SendControlData (move.x, move.y, rotate.x, rotate.y); //얘를 계속 보내준다.
+				prevMove = move;
+				prevRotate = rotate;
+			}
+
 			// do things
 		}
 	}
