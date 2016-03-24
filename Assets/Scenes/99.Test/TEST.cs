@@ -19,7 +19,7 @@ public class TEST : MonoBehaviour {
 		vr.OnBindSuccess += OnBindSuccess;
 		vr.OnControl += OnControl;
 		vr.OnFire += OnFire;
-
+		vr.OnControlType += OnControlType;
 		vr.Connect ();
 
 		text.text = vr.uid.ToString ();
@@ -41,6 +41,10 @@ public class TEST : MonoBehaviour {
 	public void OnControl(Vector2 move, Vector2 rotate){
 		moveText.text = "Move, x : " + move.x + ", y : " + move.y;
 		rotateText.text = "Rotate, x : " + rotate.x + ", y : " + rotate.y;
+	}
+
+	public void OnControlType(MoveType move, RotateType rotate){
+		Debug.Log (move.ToString () + ", " + rotate.ToString());
 	}
 
 	int fireCount = 0;
