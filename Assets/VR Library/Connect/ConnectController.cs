@@ -11,6 +11,14 @@ using UnityEngine;
 
 namespace VR.Connect
 {
+	public enum MoveType {
+		Straight, Rearguard, Left, Right, Stop
+	};
+
+	public enum RotateType {
+		Up, Down, Left, Right, Stop
+	};
+	
 	abstract class ConnectController
 	{
 		public static string SERVER_IP = "192.168.5.104";
@@ -40,6 +48,11 @@ namespace VR.Connect
 		public delegate void ReceiveUidEventHandler (int uid);
 		public delegate void GameCountHandler (int value);
 		public delegate void MoveAndRotateHandler (Vector2 move, Vector2 rotate);
+
+		/// <summary>
+		/// Move and rotate enum handler.
+		/// </summary>
+		public delegate void MoveAndRotateEnumHandler (MoveType move, RotateType rotate);
 
 		/// <summary>
 		/// Occurs when on connect succeed.
@@ -94,6 +107,11 @@ namespace VR.Connect
 		/// 패드에서의 동작 :: move, rotate(aim움직임)
  		/// </summary>
 		public event MoveAndRotateHandler OnControl;
+
+		/// <summary>
+		/// Occurs when on control type.
+		/// </summary>
+		public event MoveAndRotateEnumHandler OnControlType;
 		#endregion
 
 		public ConnectController() {
@@ -146,6 +164,9 @@ namespace VR.Connect
 
 				if (OnControl != null)
 					OnControl (move, rotate);
+
+				if (OnControlType != null)
+					OnControlType (getMoveType (move), getRotateType (rotate));
 			} else if (msg is Receive.FireMessage) { 
 				if (OnFire != null)
 					OnFire ();
@@ -206,6 +227,42 @@ namespace VR.Connect
 			}
 		}
 		#endregion
+
+		private MoveType getMoveType(Vector2 move){
+			if (Math.Abs (move.x) > Math.Abs (move.y)) {
+				if (move.x > 0) {
+					return MoveType.Right;	
+				} else {
+					return MoveType.Left;
+				}
+			} else {
+				if (move.y > 0) {
+					return MoveType.Straight;
+				} else if (move.y < 0) {
+					return MoveType.Rearguard;
+				} else {
+					return MoveType.Stop;
+				}
+			}
+		}
+
+		private RotateType getRotateType(Vector2 rotate){
+			if (Math.Abs (rotate.x) > Math.Abs (rotate.y)) {
+				if (rotate.x > 0) {
+					return RotateType.Right;	
+				} else {
+					return RotateType.Left;
+				}
+			} else {
+				if (rotate.y > 0) {
+					return RotateType.Up;
+				} else if (rotate.y < 0) {
+					return RotateType.Down;
+				} else {
+					return RotateType.Stop;
+				}
+			}
+		}
 	}
 }
 
