@@ -56,7 +56,6 @@ namespace VR.Connect.Protocol.Receive
 			case 9: // player_position
 				msg = new PlayerPosition (data);
 				break;
-
 			
 			}
 
