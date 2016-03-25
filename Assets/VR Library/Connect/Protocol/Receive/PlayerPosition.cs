@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace VR.Connect.Protocol.Receive
 {
-	public class PlayerPosition : ReceiveMessage
+	class PlayerPosition : ReceiveMessage
 	{
 		public PlayerPosition (List<byte> data)
 		{
