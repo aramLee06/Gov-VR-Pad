@@ -9,7 +9,7 @@ namespace VR.Connect.Protocol.Send
 		}
 
 		public override byte[] Generate()
-		{ //cmd
+		{ 
 			byteList.Clear ();
 			AddByte8 (3); //cmd
 			return byteList.ToArray ();

@@ -1,15 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Player : MonoBehaviour {
+namespace VR.Game {
+	class PlayerManager {
+		private PlayerManager instance = null;
+		public PlayerManager Instance {
+			get {
+				if(instance == null){
+					instance = new PlayerManager();
+				}
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+				return instance;
+			}
+		}
+
+
 	}
 }

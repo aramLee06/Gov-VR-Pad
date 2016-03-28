@@ -140,6 +140,7 @@ namespace VR.Connect
 		/// <param name="msg">Message.</param>
 		protected void Send (Send.SendMessage msg){
 			m_VRSocket.Write (msg.Generate ());
+			Debug.Log (msg.GetType().ToString());
 		}
 
 		/// <summary>
