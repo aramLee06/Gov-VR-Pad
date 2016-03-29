@@ -4,6 +4,7 @@ using VR.Connect;
 using VR.Connect.NET;
 using VR.Connect.Protocol.Send;
 
+using Send = VR.Connect.Protocol.Send;
 using Receive = VR.Connect.Protocol.Receive;
 
 namespace VR.Connect
@@ -39,6 +40,34 @@ namespace VR.Connect
 				}
 			}
 		}
+
+		#region SendMessage
+		public void SendShoot(float postionX, float postionY, float postionZ, float velocityX, float velocityY, float velocityZ){
+			Send.ShootMessage msg = new Send.ShootMessage (postionX, postionY, postionZ, velocityX, velocityY, velocityZ);
+			this.Send (msg);
+		}
+
+		public void SendHit(int uid){
+			Send.HitMessage msg = new Send.HitMessage (uid);
+			this.Send (msg);
+		}
+
+		public void SendDeath(){
+			Send.DeathMessage msg = new Send.DeathMessage ();
+			this.Send (msg);
+		}
+
+		public void SendReady(int unit){
+			Send.ReadyMessage msg = new Send.ReadyMessage (unit);
+			this.Send (msg);
+		}
+
+		public void SendExit(){
+			Send.ExitMessage msg = new Send.ExitMessage ();
+			this.Send (msg);
+		}
+
+		#endregion
 	}
 }
 

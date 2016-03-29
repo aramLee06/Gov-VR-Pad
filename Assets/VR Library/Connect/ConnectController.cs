@@ -45,12 +45,12 @@ namespace VR.Connect
 		#region Delegate & Event
 		public delegate void BaseEventHandler ();
 		public delegate void BindFailedHandler (int code);
-		public delegate void ReceiveUidEventHandler (float uid);
+		public delegate void ReceiveUidEventHandler (int uid);
 		public delegate void VlaueHandler (int value);
 		public delegate void GameEndHanler (float value);
 		public delegate void MoveAndRotateHandler (Vector2 move, Vector2 rotate);
 		public delegate void ShootHandler (Vector3 position, Vector3 velocity);
-		public delegate void SoldOutHandler (float uid, float unitnum);
+		public delegate void SoldOutHandler (int uid, int unitnum);
 
 		/// <summary>
 		/// Move and rotate enum handler.

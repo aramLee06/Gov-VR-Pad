@@ -5,8 +5,8 @@ namespace VR.Connect.Protocol.Receive
 {
 	class SoldOutMessage : ReceiveMessage
 	{
-		private float _uid;
-		public float uid {
+		private int _uid;
+		public int uid {
 			get{
 				return _uid;
 			}
@@ -14,8 +14,8 @@ namespace VR.Connect.Protocol.Receive
 				_uid = value;
 			}
 		}
-		private float _unitnum;
-		public float unitnum {
+		private int _unitnum;
+		public int unitnum {
 			get{
 				return _unitnum;
 			}
@@ -26,7 +26,7 @@ namespace VR.Connect.Protocol.Receive
 		public SoldOutMessage (List<byte> data)
 		{
 			byte[] uid_arr = { data [1], data [2] };
-			_uid = BitConverter.ToSingle (uid_arr, 0);
+			_uid = BitConverter.ToInt16 (uid_arr, 0);
 			_unitnum = data [3];
 
 			data.RemoveRange (0, 4);

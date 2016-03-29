@@ -53,12 +53,7 @@ namespace VR.Connect
 		/// </summary>
 		public void SendFire(){
 			Send.GunFireMessage msg = new Send.GunFireMessage ();
-			this.Send (msg);
-		}
-
-		public void SendCurrentPosition(float move_x, float move_y, float move_z, float rotate_x, float rotate_y, float rotate_z, float current_x, float current_y, float current_z ){
-			Send.CurrentPosition msg = new Send.CurrentPosition ();
-			this.Send (msg);
+			this.Send (msg.Generate());
 		}
 
 		public void Run()

@@ -5,8 +5,8 @@ namespace VR.Connect.Protocol.Receive
 {
 	class DeathMessage : ReceiveMessage
 	{
-		private float _uid;
-		public float uid {
+		private int _uid;
+		public int uid {
 			get{
 				return _uid;
 			}
@@ -17,7 +17,7 @@ namespace VR.Connect.Protocol.Receive
 		public DeathMessage (List<byte> data)
 		{
 			byte[] uid_arr = { data [1], data [2] };
-			_uid = BitConverter.ToSingle (uid_arr, 0);
+			_uid = BitConverter.ToInt16 (uid_arr, 0);
 
 			data.RemoveRange (0, 3);
 		}
