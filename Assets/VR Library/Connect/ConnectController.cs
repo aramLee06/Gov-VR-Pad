@@ -21,11 +21,11 @@ namespace VR.Connect
 	
 	abstract class ConnectController
 	{
-		public static string SERVER_IP = "192.168.5.104";
-		public const int SERVER_PORT = 3500; 
+		public static string SERVER_IP = "192.168.1.100";
+		public const int SERVER_PORT = 5010; 
 		public static string REST_URL {
 			get {
-				return "http://" + SERVER_IP + ":3510";
+				return "http://" + SERVER_IP + ":5000";
 			}
 		}
 
@@ -45,9 +45,12 @@ namespace VR.Connect
 		#region Delegate & Event
 		public delegate void BaseEventHandler ();
 		public delegate void BindFailedHandler (int code);
-		public delegate void ReceiveUidEventHandler (int uid);
-		public delegate void GameCountHandler (int value);
+		public delegate void ReceiveUidEventHandler (float uid);
+		public delegate void VlaueHandler (int value);
+		public delegate void GameEndHanler (float value);
 		public delegate void MoveAndRotateHandler (Vector2 move, Vector2 rotate);
+		public delegate void ShootHandler (Vector3 position, Vector3 velocity);
+		public delegate void SoldOutHandler (float uid, float unitnum);
 
 		/// <summary>
 		/// Move and rotate enum handler.
@@ -72,9 +75,10 @@ namespace VR.Connect
 		public event BaseEventHandler OnBindSuccess;
 
 		/// <summary>
-		/// Occurs when on fire. (Press fire btn on pad)
+		/// Occurs when on shoot message.
+		/// 누군가들에의해 발사된 대포 위치를 broad cast 받은것.
 		/// </summary>
-		public event BaseEventHandler OnFire;
+		public event ShootHandler OnShoot;
 
 		/// <summary>
 		/// Occurs when on game start.
@@ -83,20 +87,21 @@ namespace VR.Connect
 
 		/// <summary>
 		/// Occurs when on game end.
+		/// 플레이한 시간 보낸다..
 		/// </summary>
-		public event BaseEventHandler OnGameEnd;
+		public event GameEndHanler OnGameEnd;
 
 		/// <summary>
 		/// 미정
 		/// </summary>
 		public event BaseEventHandler OnMap;
 
-		public event GameCountHandler OnGameCount;
+		public event VlaueHandler OnGameCount;
 
 		/// <summary>
-		/// Occurs when on hit. (대포 맞았을 때)
+		/// Occurs when on attacked. (대포 맞았을 때)
 		/// </summary>
-		public event ReceiveUidEventHandler OnHit;
+		public event BaseEventHandler OnAttacked;
 
 		/// <summary>
 		/// Occurs when on bind failed. (Between VR to Pad)
@@ -109,9 +114,22 @@ namespace VR.Connect
 		public event MoveAndRotateHandler OnControl;
 
 		/// <summary>
+		/// Occurs when on death.
+		/// 게임중 다른 사람의 죽음
+		/// </summary>
+		public event ReceiveUidEventHandler OnDeath;
+
+		/// <summary>
 		/// Occurs when on control type.
 		/// </summary>
 		public event MoveAndRotateEnumHandler OnControlType;
+
+		/// <summary>
+		/// Occurs when on sold out.
+		/// 로비에서 다른 사람이 유닛 고른경우 오는 메세지
+		/// </summary>
+		public event SoldOutHandler OnSoldOut;
+
 		#endregion
 
 		public ConnectController() {
@@ -140,6 +158,7 @@ namespace VR.Connect
 		/// <param name="msg">Message.</param>
 		protected void Send (Send.SendMessage msg){
 			m_VRSocket.Write (msg.Generate ());
+			Debug.Log (msg.GetType().ToString());
 		}
 
 		/// <summary>
@@ -167,9 +186,12 @@ namespace VR.Connect
 
 				if (OnControlType != null)
 					OnControlType (getMoveType (move), getRotateType (rotate));
-			} else if (msg is Receive.FireMessage) { 
-				if (OnFire != null)
-					OnFire ();
+			} else if (msg is Receive.ShootMessage) { 
+				Receive.ShootMessage m = (Receive.ShootMessage)msg;
+				Vector3 position = new Vector3 (m.positionX, m.positionY, m.positionZ);
+				Vector3 velocity = new Vector3 (m.velocityX, m.velocityY, m.velocityZ);
+				if (OnShoot != null)
+					OnShoot (position, velocity);
 			} else if (msg is Receive.GameStartMessage) {
 				if (OnGameStart != null)
 					OnGameStart ();
@@ -178,13 +200,19 @@ namespace VR.Connect
 					OnGameCount (((Receive.GameCountMessage)msg).value);
 			} else if (msg is Receive.GameEndMessage) {
 				if (OnGameEnd != null)
-					OnGameEnd ();
-			} else if (msg is Receive.HitMessage) {
-				if (OnHit != null)
-					OnHit (((Receive.HitMessage)msg).uid);
+					OnGameEnd (((Receive.GameEndMessage)msg).value);
+			} else if (msg is Receive.AttackedMessage) {
+				if (OnAttacked != null)
+					OnAttacked ();
 			} else if (msg is Receive.MapMessage) {
 				if (OnMap != null)
 					OnMap ();
+			} else if (msg is Receive.DeathMessage) {
+				if (OnDeath != null)
+					OnDeath (((Receive.DeathMessage)msg).uid);
+			} else if (msg is Receive.SoldOutMessage) {
+				if(OnSoldOut != null)
+					OnSoldOut(((Receive.SoldOutMessage)msg).uid ,((Receive.SoldOutMessage)msg).unitnum);
 			}
 		}
 

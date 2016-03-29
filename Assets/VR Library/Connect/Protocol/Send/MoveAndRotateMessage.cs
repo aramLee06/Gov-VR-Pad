@@ -53,7 +53,7 @@ namespace VR.Connect.Protocol.Send
 		}
 
 		public override byte[] Generate()
-		{ //cmd, x, y
+		{ 
 			byteList.Clear ();
 			AddByte8 (2); //cmd
 			AddByteFloat(moveX);
