@@ -29,8 +29,8 @@ namespace VR.Connect.Protocol.Receive
 					msg = new MoveAndRotateMessage (data);
 					break;
 
-				case 3 : // Fire
-					msg = new FireMessage(data);
+				case 3 : // Shoot
+					msg = new ShootMessage(data);
 					break;
 
 				case 4 : // game_count
@@ -45,19 +45,24 @@ namespace VR.Connect.Protocol.Receive
 					msg = new GameEndMessage(data);
 					break;
 
-				case 7 : // hit
-					msg = new HitMessage(data);
+				case 7 : // attacked
+					msg = new AttackedMessage(data);
 					break;
 
 				case 8 : // map
 					msg = new MapMessage(data);
 					break;
 
-			case 9: // player_position
-				msg = new PlayerPosition (data);
-				break;
-			
-			}
+				case 9: // player_position
+					msg = new PlayerPosition (data);
+					break;
+				case 10: // death
+					msg = new DeathMessage (data);
+					break;
+				case 11: // sold_out
+					msg = new SoldOutMessage (data);
+					break;
+				}
 
 
 			return msg;

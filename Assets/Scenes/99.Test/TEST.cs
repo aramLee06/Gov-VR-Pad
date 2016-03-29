@@ -18,7 +18,7 @@ public class TEST : MonoBehaviour {
 		vr = new VRConnect ();
 		vr.OnBindSuccess += OnBindSuccess;
 		vr.OnControl += OnControl;
-		vr.OnFire += OnFire;
+		vr.OnShoot += OnShoot;
 		vr.OnControlType += OnControlType;
 		vr.Connect ();
 
@@ -49,7 +49,7 @@ public class TEST : MonoBehaviour {
 	}
 
 	int fireCount = 0;
-	public void OnFire(){
+	public void OnShoot(Vector3 position, Vector3 velocity){
 		fireText.text = "FireCount : " + (++fireCount);
 	}
 }

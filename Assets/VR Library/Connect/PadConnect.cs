@@ -52,7 +52,7 @@ namespace VR.Connect
 		/// When press fire btn on pad
 		/// </summary>
 		public void SendFire(){
-			Send.FireMessage msg = new Send.FireMessage ();
+			Send.GunFireMessage msg = new Send.GunFireMessage ();
 			this.Send (msg);
 		}
 
