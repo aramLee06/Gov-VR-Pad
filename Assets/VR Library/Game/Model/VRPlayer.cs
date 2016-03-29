@@ -1,15 +1,33 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class VRPlayer : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-	
+namespace VR.Game {
+	public enum UnitType {
+		RedDrone, RedTank, BlueDrone, BlueTank
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	public enum PlayerStatus {
+		
+	}
+
+	class VRPlayer {
+		public VRPlayer(int uid) {
+			this._uid = uid;
+		}
+
+		public UnitType Unit{ get; set;}
+
+		private int _uid;
+		public int uid {
+			get {
+				return uid;
+			}
+		}
+
+		public Vector3 Position {get; set;}
+
+		public Vector3 Move {get; set;}
+
+		public Vector3 Rotation {get; set;}
 	}
 }
