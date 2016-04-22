@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace VR.Game {
 	public enum UnitType {
-		RedDrone = 2, RedTank = 0, BlueDrone = 3, BlueTank = 1
+		RedDrone = 2, RedTank = 3, BlueDrone = 1, BlueTank = 0
 	}
 
 	public enum PlayerStatus {
@@ -14,6 +14,18 @@ namespace VR.Game {
 		public VRPlayer(int uid, int HP=11) {
 			this._uid = uid;
 			this.hp = HP;
+
+			this.Position = new Vector3 ();
+			this.Move = new Vector3 ();
+			this.Rotation = new Vector3 ();
+		}
+
+		public VRPlayer(int uid, int HP, Vector3 Pos, Vector3 Move, Vector3 Rot){
+			this._uid = uid;
+			this.HP = HP;
+			this.Position = Pos;
+			this.Move = Move;
+			this.Rotation = Rot;
 		}
 
 		public UnitType Unit{ get; set;}

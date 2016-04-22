@@ -51,5 +51,6 @@ public class TEST : MonoBehaviour {
 	int fireCount = 0;
 	public void OnShoot(Vector3 position, Vector3 velocity){
 		fireText.text = "FireCount : " + (++fireCount);
+
 	}
 }

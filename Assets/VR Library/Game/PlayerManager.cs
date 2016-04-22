@@ -22,6 +22,7 @@ namespace VR.Game {
 			}
 			set {
 				this.currentPlayer = value;
+				value.isCurrent = true;
 			}
 		}
 
@@ -35,9 +36,14 @@ namespace VR.Game {
 		/// Adds the player.
 		/// </summary>
 		/// <param name="player">Player.</param>
-		public void AddPlayer(VRPlayer player){
+		/// <param name="isCurrent">If set to <c>true</c> is current.</param>
+		public void AddPlayer(VRPlayer player, bool isCurrent =false){
 			if (player.uid > 0) {
 				m_PlayerList.Add (player.uid, player);
+
+				if (isCurrent) {
+					this.CurrentPlayer = player;
+				}
 			}
 		}
 

@@ -2,7 +2,6 @@
 using VR;
 using VR.Connect;
 using VR.Connect.NET;
-using VR.Connect.Protocol.Send;
 
 using Send = VR.Connect.Protocol.Send;
 using Receive = VR.Connect.Protocol.Receive;
@@ -25,7 +24,7 @@ namespace VR.Connect
 		/// </summary>
 		public void Join()
 		{
-			VRJoinMessage msg = new VRJoinMessage (this.uid);
+			Send.VRJoinMessage msg = new Send.VRJoinMessage (this.uid);
 			this.Send (msg);
 		}
 
@@ -64,6 +63,11 @@ namespace VR.Connect
 
 		public void SendExit(){
 			Send.ExitMessage msg = new Send.ExitMessage ();
+			this.Send (msg);
+		}
+
+		public void SendCurrentPosition(float moveX, float moveY, float moveZ,float rotateX, float rotateY, float rotateZ,float postionX, float postionY, float postionZ){
+			Send.CurrentPositionMessage msg = new Send.CurrentPositionMessage (moveX, moveY, moveZ,rotateX, rotateY, rotateZ,postionX, postionY, postionZ);
 			this.Send (msg);
 		}
 

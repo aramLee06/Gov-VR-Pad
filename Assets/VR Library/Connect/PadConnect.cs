@@ -53,7 +53,7 @@ namespace VR.Connect
 		/// </summary>
 		public void SendFire(){
 			Send.GunFireMessage msg = new Send.GunFireMessage ();
-			this.Send (msg.Generate());
+			this.Send (msg);
 		}
 
 		public void Run()

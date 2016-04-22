@@ -95,6 +95,8 @@ namespace VR.Game {
 			vrConnect.OnDeath += OnDeath_proxy;
 			vrConnect.OnControlType += OnControlType_proxy;
 			vrConnect.OnSoldOut += OnSoldOut_proxy;
+
+			StartCoroutine ("ReportCurrentPosition");
 		}
 
 		// Update is called once per frame
@@ -168,8 +170,12 @@ namespace VR.Game {
 			if (OnSoldOut != null) {
 				VRPlayer player = playerManager.GetPlayer (uid);
 				UnitType type = (UnitType)unitnum;
-
 				OnSoldOut (player, type);
+			}
+
+			if (playerManager.CurrentPlayer.uid == uid) {
+				UnitType type = (UnitType)unitnum;
+				playerManager.CurrentPlayer.Unit = type;
 			}
 		}
 
@@ -184,8 +190,23 @@ namespace VR.Game {
 			vrConnect.SendDeath ();
 		}
 
-		public void SendReady(){
-			vrConnect.SendReady ((int)playerManager.CurrentPlayer.Unit);
+		public void SendSelectUnit(UnitType unit){
+			vrConnect.SendReady ((int)unit);
+		}
+
+		public void SendShoot(Vector3 position, Vector3 velocity){
+			vrConnect.SendShoot (position.x, position.y, position.z, velocity.x, velocity.y, velocity.z);
+		}
+
+		private IEnumerator ReportCurrentPosition()
+		{
+			while(true)
+			{
+				yield return new WaitForSeconds(0.3f); // wait half a second
+				VRPlayer p = playerManager.CurrentPlayer;
+				if(p != null)
+					vrConnect.SendCurrentPosition (p.Move.x, p.Move.y, p.Move.z, p.Rotation.x, p.Rotation.y, p.Rotation.z, p.Position.x, p.Position.y, p.Position.z);
+			}
 		}
 		#endregion
 	}
