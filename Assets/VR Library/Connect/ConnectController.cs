@@ -21,7 +21,8 @@ namespace VR.Connect
 	
 	abstract class ConnectController
 	{
-		public static string SERVER_IP = "192.168.5.104";
+		public static string SERVER_IP = "192.168.1.100";
+		//public static string SERVER_IP = "192.168.5.116";
 		public const int SERVER_PORT = 5010; 
 		public static string REST_URL {
 			get {
