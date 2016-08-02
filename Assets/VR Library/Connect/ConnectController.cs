@@ -53,6 +53,7 @@ namespace VR.Connect
 		public delegate void ShootHandler (Vector3 position, Vector3 velocity);
 		public delegate void SoldOutHandler (int uid, int unitnum);
 
+
 		/// <summary>
 		/// Move and rotate enum handler.
 		/// </summary>
@@ -130,6 +131,18 @@ namespace VR.Connect
 		/// 로비에서 다른 사람이 유닛 고른경우 오는 메세지
 		/// </summary>
 		public event SoldOutHandler OnSoldOut;
+
+		/// <summary>
+		/// Occurs when on death.
+		/// 게임중 죽음
+		/// </summary>
+		public event ReceiveUidEventHandler OnDeathStop;
+
+		/// <summary>
+		/// Occurs when on death.
+		/// Emergency Stop
+		/// </summary>
+		public event ReceiveUidEventHandler OnEmergencyStop;
 
 		#endregion
 
@@ -214,6 +227,12 @@ namespace VR.Connect
 			} else if (msg is Receive.SoldOutMessage) {
 				if(OnSoldOut != null)
 					OnSoldOut(((Receive.SoldOutMessage)msg).uid ,((Receive.SoldOutMessage)msg).unitnum);
+			} else if (msg is Receive.DeathStopMessage) {
+				if (OnDeathStop != null)
+					OnDeathStop (((Receive.DeathMessage)msg).uid);
+			} else if (msg is Receive.EmergencyStopMessage) {
+				if(OnEmergencyStop != null)
+					OnEmergencyStop(((Receive.DeathMessage)msg).uid);
 			}
 		}
 

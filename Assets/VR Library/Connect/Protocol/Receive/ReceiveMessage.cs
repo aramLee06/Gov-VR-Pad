@@ -62,6 +62,12 @@ namespace VR.Connect.Protocol.Receive
 				case 11: // sold_out
 					msg = new SoldOutMessage (data);
 					break;
+				case 12: // emergency_stop
+					msg = new EmergencyStopMessage (data);
+					break;
+				case 13: // death_stop
+					msg = new DeathStopMessage (data);
+					break;
 				}
 
 

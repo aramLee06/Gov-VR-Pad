@@ -22,6 +22,7 @@ namespace VR.Connect
 		public PadConnect(){
 			
 		}
+
 		/// <summary>
 		/// Pad_Join_Message Send to Server
 		/// </summary>
@@ -67,6 +68,18 @@ namespace VR.Connect
 				}
 			}
 		}
+
+		public void Emergency() {
+			Send.EmergencyStop msg = new Send.EmergencyStop ();
+			this.Send (msg);
+		}
+
+		public void DeathStop(float altitude) {
+			
+			Send.DeathStopMessage msg = new Send.DeathStopMessage (altitude);
+			this.Send (msg);
+		}
+
 	}
 }
 

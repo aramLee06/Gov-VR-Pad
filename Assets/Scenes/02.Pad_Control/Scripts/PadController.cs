@@ -14,13 +14,15 @@ public class PadController : MonoBehaviour {
 
 	private PadConnect m_PadConnect;
 
+	private bool fireCheck;
 	// Use this for initialization
 	void Start () {
 		//Screen.orientation = ScreenOrientation.LandscapeLeft;
 		m_PadConnect = PadConnect.Instance;
+
 		StartCoroutine("SendMoveRotate"); //멀티 스레드처럼 동시처리 가능
-	} 
-	
+	}
+
 	// Update is called once per frame
 	void Update () {
 		beforeAxis = RotateJoyStick.JoystickAxis;
@@ -44,7 +46,7 @@ public class PadController : MonoBehaviour {
 				prevMove = move;
 				prevRotate = rotate;
 			}
-
+			Debug.Log ("SendMoveRotate");
 			// do things
 		}
 	}
@@ -54,10 +56,50 @@ public class PadController : MonoBehaviour {
 	/// When press fire btn on pad
 	/// </summary>
 	public void OnFire() {
-		if (beforeAxis.x == 0 && beforeAxis.y == 0) { //터치 확인 //드래그는 X
-			m_PadConnect.SendFire (); 
-			Handheld.Vibrate(); //핸드폰 진동
+		if (fireCheck) {
+			if (beforeAxis.x == 0 && beforeAxis.y == 0) { //터치 확인 //드래그는 X
+				m_PadConnect.SendFire (); 
+				Handheld.Vibrate (); //핸드폰 진동
+				StartCoroutine (Fireable ());
+			}
 		}
 	}
+
+	IEnumerator Fireable() {
+		fireCheck = false;
+
+		yield return new WaitForSeconds(4.0f); 
+		fireCheck = true;
+	}
+
+	/// <summary>
+	/// Raises the emergency stop event.
+	/// when press emergency btn on pad
+	/// </summary>
+	public void OnEmergencyStop() {
+		
+		StopCoroutine (SendMoveRotate ());
+		MoveJoyStick.gameObject.SetActive (false);
+		RotateJoyStick.gameObject.SetActive (false);
+		m_PadConnect.Emergency ();
+		Debug.Log ("Emergency");
+	}
+
+	public void OnDeathStop() {
+		StopCoroutine (SendMoveRotate ());
+		MoveJoyStick.gameObject.SetActive (false);
+		RotateJoyStick.gameObject.SetActive (false);
+		StartCoroutine (SendDeathStop ());
+	}
+
+	private IEnumerator SendDeathStop() {
+		// 150, 100, 50, 0
+		for (int i = 0; i < 4; i++) {
+			yield return new WaitForSeconds(0.5f); // wait half a second
+			m_PadConnect.DeathStop (150 -(50*i));
+			Debug.Log ("DeathStop : " + (150 - (50 * i)));
+		}
+	}
+
 }
 
