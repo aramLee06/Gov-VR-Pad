@@ -14,7 +14,7 @@ public class PadController : MonoBehaviour {
 
 	private PadConnect m_PadConnect;
 
-	private bool fireCheck;
+	private bool fireCheck = true;
 	// Use this for initialization
 	void Start () {
 		//Screen.orientation = ScreenOrientation.LandscapeLeft;
@@ -60,8 +60,8 @@ public class PadController : MonoBehaviour {
 			if (beforeAxis.x == 0 && beforeAxis.y == 0) { //터치 확인 //드래그는 X
 				m_PadConnect.SendFire (); 
 				Handheld.Vibrate (); //핸드폰 진동
-				StartCoroutine (Fireable ());
 			}
+			StartCoroutine (Fireable ());
 		}
 	}
 
@@ -93,12 +93,10 @@ public class PadController : MonoBehaviour {
 	}
 
 	private IEnumerator SendDeathStop() {
-		// 150, 100, 50, 0
-		for (int i = 0; i < 4; i++) {
-			yield return new WaitForSeconds(0.5f); // wait half a second
-			m_PadConnect.DeathStop (150 -(50*i));
-			Debug.Log ("DeathStop : " + (150 - (50 * i)));
-		}
+		m_PadConnect.DeathStop ();
+
+		yield return new WaitForSeconds(1.0f);
+		m_PadConnect.Emergency ();
 	}
 
 }

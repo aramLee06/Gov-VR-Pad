@@ -74,9 +74,9 @@ namespace VR.Connect
 			this.Send (msg);
 		}
 
-		public void DeathStop(float altitude) {
+		public void DeathStop() {
 			
-			Send.DeathStopMessage msg = new Send.DeathStopMessage (altitude);
+			Send.DeathStopMessage msg = new Send.DeathStopMessage ();
 			this.Send (msg);
 		}
 
